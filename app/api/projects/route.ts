@@ -1,6 +1,7 @@
 // app/api/projects/route.ts
+
 import { NextResponse } from 'next/server';
-import { PrismaClient, Project } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 
@@ -16,17 +17,21 @@ export async function GET() {
 
     const projects = await prisma.project.findMany({
       include: {
-        assignedStudents: {
+        users: {
           select: {
             id: true,
             name: true,
             email: true,
-            // Add other fields you want to include
+            role: true,
+          }
+        },
+        tasks: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
           }
         }
-      },
-      orderBy: {
-        createdAt: 'desc'
       }
     });
 
@@ -34,8 +39,11 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching projects:", error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
+
 
 export async function POST(request: Request) {
   try {
@@ -45,21 +53,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { title, description, deadline } = await request.json();
+    const body = await request.json();
+    console.log("Received body:", body);
 
-    const newProject = await prisma.project.create({
+    const { title, description, deadline } = body;
+
+    const project = await prisma.project.create({
       data: {
-        title,
+        name: title,
         description,
-        deadline: new Date(deadline),
         status: 'pending',
-        createdBy: { connect: { email: session.user.email } },
-      }
+        users: {
+          connect: { email: session.user.email }
+        }
+      },
     });
 
-    return NextResponse.json(newProject, { status: 201 });
+    console.log("Created project:", project);
+
+    return NextResponse.json(project, { status: 201 });
   } catch (error) {
     console.error("Error creating project:", error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal Server Error', details: (error as any).message }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }
