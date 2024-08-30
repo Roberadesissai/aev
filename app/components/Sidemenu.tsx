@@ -46,16 +46,11 @@ export function Sidemenu() {
             />
           </div>
 
-          <Link className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/">
+          <Link className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/dashboard">
             <Home className="w-5 h-5" />
             <span className="mx-2 text-sm font-medium">Home</span>
           </Link>
-
-          <Link className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/dashboard">
-            <User className="w-5 h-5" />
-            <span className="mx-2 text-sm font-medium">Dashboard</span>
-          </Link>
-
+          
           <Link className="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700" href="/projects">
             <Clipboard className="w-5 h-5" />
             <span className="mx-2 text-sm font-medium">Projects</span>
