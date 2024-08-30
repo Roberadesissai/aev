@@ -4,9 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 import { Home, Settings, User, Calendar, Bell, Clipboard, FileText, Ticket, Clock, CalendarCheck, CalendarArrowDown } from "lucide-react";
 
 export function Sidemenu() {
+  const { theme, setTheme } = useTheme();
+  
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -91,6 +94,18 @@ export function Sidemenu() {
             <span className="mx-2 text-sm font-medium">Request Time Off</span>
           </Link>
         </nav>
+
+        <div className="px-1 py-4">
+          <button
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className={`w-full px-4 py-2 rounded-md backdrop-blur-lg border shadow-md transition-colors duration-300 ${theme === "light"
+                ? "text-gray-700 bg-white/30 border-white/10 hover:bg-white/40"
+                : "text-white dark:bg-gray-800/30 dark:border-gray-700/10 dark:hover:bg-gray-800/40"
+              }`}
+          >
+            Toggle {theme === "light" ? "Dark" : "Light"} Mode
+          </button>
+        </div>
 
         <div className="mt-6">
           <div className="p-4 bg-gradient-to-r from-green-100 to-blue-100 dark:from-gray-700 dark:to-gray-800 rounded-lg shadow-lg flex items-start">
